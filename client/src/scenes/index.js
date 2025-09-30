@@ -4,6 +4,7 @@
 import Layout from "./layout";
 import Dashboard from "./dashboard";
 import Products from "./products";
+import ProductsNew from "./productsNew";
 import Customers from "./customers";
 import Transactions from "./transactions";
 import Geography from "./geography";
@@ -19,6 +20,7 @@ export {
   Layout,
   Dashboard,
   Products,
+  ProductsNew,
   Customers,
   Transactions,
   Geography,
