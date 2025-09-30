@@ -20,6 +20,17 @@ const store = configureStore({
 });
 setupListeners(store.dispatch);
 
+// Start MSW in development mode (optional - only if you want to use mocks)
+// To enable mocks, set REACT_APP_USE_MOCKS=true in your .env file
+if (process.env.NODE_ENV === 'development' && process.env.REACT_APP_USE_MOCKS === 'true') {
+  const { worker } = require('./mocks/browser');
+  worker.start({
+    onUnhandledRequest: 'bypass', // Don't warn about unhandled requests
+  }).then(() => {
+    console.log('🔶 MSW Mock Service Worker started');
+  });
+}
+
 // Rendering App
 createRoot(document.getElementById("root")).render(
   <Provider store={store}>
