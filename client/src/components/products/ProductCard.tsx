@@ -9,17 +9,23 @@ import {
   Rating,
   useTheme,
 } from '@mui/material';
-import { Product } from 'types/product.types';
+import { Product, ProductStat } from 'types/product.types';
+import ProductChart from './ProductChart';
 
 interface ProductCardProps {
-  product: Product;
+  product: Product & { stat: ProductStat };
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const theme = useTheme();
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const { _id, name, description, price, rating, category, supply, yearlySalesTotal, yearlyTotalSoldUnits } = product;
+  const { _id, name, description, price, rating, category, supply, yearlySalesTotal, yearlyTotalSoldUnits, stat } = product;
+
+  const formattedPrice = new Intl.NumberFormat('en-IN', {
+    style: 'currency',
+    currency: 'INR',
+  }).format(price);
 
   return (
     <Card
@@ -41,7 +47,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           {name}
         </Typography>
         <Typography sx={{ mb: '1.5rem' }} color={theme.palette.secondary[400]}>
-          {`$${Number(price).toFixed(2)}`}
+          {formattedPrice}
         </Typography>
         <Rating value={rating} readOnly />
         <Typography variant="body2">{description}</Typography>
@@ -51,11 +57,14 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           variant="contained"
           size="small"
           onClick={() => setIsExpanded(!isExpanded)}
+          aria-expanded={isExpanded}
+          aria-controls={`product-details-${_id}`}
         >
           {isExpanded ? 'See Less' : 'See More'}
         </Button>
       </CardActions>
       <Collapse
+        id={`product-details-${_id}`}
         in={isExpanded}
         timeout="auto"
         unmountOnExit
@@ -70,6 +79,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
           <Typography>
             Yearly Units Sold This Year: {yearlyTotalSoldUnits}
           </Typography>
+          {stat && stat.monthlyData && <ProductChart data={stat.monthlyData} />}
         </CardContent>
       </Collapse>
     </Card>

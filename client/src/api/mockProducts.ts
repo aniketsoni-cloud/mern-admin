@@ -30,14 +30,22 @@ export const mockProductStats: ProductStat[] = [
     productId: '1',
     yearlySalesTotal: 50000,
     yearlyTotalSoldUnits: 500,
-    monthlyData: [],
+    monthlyData: [
+      { month: 'Jan', totalSales: 4000, totalUnits: 40 },
+      { month: 'Feb', totalSales: 5000, totalUnits: 50 },
+      { month: 'Mar', totalSales: 4500, totalUnits: 45 },
+    ],
     dailyData: [],
   },
   {
     productId: '2',
     yearlySalesTotal: 100000,
     yearlyTotalSoldUnits: 500,
-    monthlyData: [],
+    monthlyData: [
+      { month: 'Jan', totalSales: 8000, totalUnits: 40 },
+      { month: 'Feb', totalSales: 10000, totalUnits: 50 },
+      { month: 'Mar', totalSales: 9000, totalUnits: 45 },
+    ],
     dailyData: [],
   },
 ];

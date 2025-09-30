@@ -5,12 +5,12 @@ import {
   useMediaQuery,
   Typography,
 } from '@mui/material';
-import { Product } from 'types/product.types';
-import { getMockProducts } from 'api/mockProducts';
+import { Product, ProductStat } from 'types/product.types';
+import { getMockProducts, getMockProductStats } from 'api/mockProducts';
 import ProductCard from './ProductCard';
 
 const ProductList: React.FC = () => {
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<(Product & { stat: ProductStat })[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const isNonMobile = useMediaQuery('(min-width: 1000px)');
@@ -18,8 +18,15 @@ const ProductList: React.FC = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await getMockProducts();
-        setProducts(response.data);
+        const productResponse = await getMockProducts();
+        const statsResponse = await getMockProductStats();
+
+        const productsWithStats = productResponse.data.map((product) => ({
+          ...product,
+          stat: statsResponse.data.find((stat) => stat.productId === product._id),
+        }));
+
+        setProducts(productsWithStats as (Product & { stat: ProductStat })[]);
       } catch (err) {
         setError('Failed to fetch products.');
       }
